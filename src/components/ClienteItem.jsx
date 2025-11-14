@@ -65,8 +65,8 @@ function ClienteItem({ cliente, onEliminar, onGuardar }) { // Recibimos el objet
         <div>
             {/* Usamos los datos pasados por props */}
             <strong>{cliente.nombre}</strong> - Tel: {cliente.telefono}
-            <button className="btn-eliminar" onClick={handleEliminarClick} >🗑️ Eliminar</button>
             <button className="btn-editar"onClick={handleEditClick}>✏️ Editar</button>
+            <button className="btn-eliminar" onClick={handleEliminarClick} >🗑️ Eliminar</button>
         </div>
       )}
     </li>

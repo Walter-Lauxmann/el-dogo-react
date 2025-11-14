@@ -3,6 +3,7 @@
 import React, { useState } from 'react'; // ¡Importamos useState!
 import FormularioCliente from './components/FormularioCliente'; // ¡Lo importamos!
 import ClienteItem from './components/ClienteItem';
+import Login from './components/Login';
 import './App.css'; 
 
 function VeterinariaApp() {
@@ -56,18 +57,24 @@ function VeterinariaApp() {
     setClientes(listaActualizada);
   };
 
+  // ⭐️ 1. Nuevo Estado de Seguridad: Por defecto, nadie está logueado (false)
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  
+  // ⭐️ 2. Función Setter que pasaremos al componente Login
+  const handleLogin = (estado) => {
+    setIsLoggedIn(estado); // Cambia el estado a true si el login fue exitoso
+  };
+
   return (
     <div className="app-container">
       <h1>El Dogo - Gestión de Veterinaria 🐾</h1>
-      
-      {/* Aquí podemos mostrar cuántos clientes tenemos 
-        ¡El valor 'clientes.length' se actualizará automáticamente 
-        cuando usemos setClientes!
-      */}
-      <p>Total de clientes registrados: **{clientes.length}**</p> 
-
+      {/* ⭐️ 3. EL RENDERIZADO CONDICIONAL GLOBAL */}
+      {isLoggedIn ? (
+        // Bloque A: Si el usuario está logueado (TRUE) 
       <section className="dashboard">
         <h2>Gestión de Clientes</h2>
+        
+        <p>Total de clientes registrados: **{clientes.length}**</p> 
         {/* 
         ¡Lo usamos como una etiqueta HTML! 
         ⭐️ PASAMOS LA FUNCIÓN COMO UNA PROP al componente hijo
@@ -85,13 +92,24 @@ function VeterinariaApp() {
               onEliminar={eliminarCliente}  
               onGuardar={actualizarCliente} // 👈 Nueva prop para la modificación
             />
-
           ))}
         </ul>
       </section>
-      
+      ) : (
+        // Bloque B: Si el usuario NO está logueado (FALSE)
+        // Mostramos el componente Login, pasándole la función handleLogin
+        <Login onLoginExitoso={handleLogin} />
+      )}
+
+      {/* Opcional: un botón de Logout para volver a la pantalla de login */}
+      {isLoggedIn && (
+        <button className="btn-logout" onClick={() => setIsLoggedIn(false)}>
+          Salir (Logout)
+        </button>
+      )}
     </div>
   );
+  
 }
 
 export default VeterinariaApp;
