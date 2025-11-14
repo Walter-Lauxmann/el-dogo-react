@@ -28,6 +28,22 @@ function VeterinariaApp() {
     ]);
   };
 
+  // ⭐️ Función para actualizar un cliente en la lista
+  const actualizarCliente = (clienteActualizado) => {
+    // Usamos .map() para recorrer el array y cambiar solo el cliente deseado
+    const listaActualizada = clientes.map(cliente => {
+      if (cliente.id === clienteActualizado.id) {
+        // Si encontramos el cliente, devolvemos el objeto NUEVO y actualizado
+        return clienteActualizado;
+      }
+      // Si no es el cliente que buscamos, devolvemos el cliente ORIGINAL sin cambios
+      return cliente;
+    });
+    
+    // Pasamos el array completamente NUEVO a setClientes
+    setClientes(listaActualizada);
+  };
+
   // ⭐️ Función para eliminar un cliente
   const eliminarCliente = (clienteId) => {
     // 1. Usamos .filter() para crear un NUEVO array
@@ -66,7 +82,8 @@ function VeterinariaApp() {
             <ClienteItem 
               key={cliente.id} 
               cliente={cliente} 
-              onEliminar={eliminarCliente}  // 👈 Nueva prop
+              onEliminar={eliminarCliente}  
+              onGuardar={actualizarCliente} // 👈 Nueva prop para la modificación
             />
 
           ))}

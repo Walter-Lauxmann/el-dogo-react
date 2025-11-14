@@ -1,9 +1,41 @@
+import React, { useState } from 'react';
+
 // src/components/ClienteItem.jsx (¡Lo crearemos!)
 // Este componente recibirá { cliente } como una prop.
 // ⭐️ Recibimos la función onEliminar como una prop
 
-function ClienteItem({ cliente, onEliminar }) { // Recibimos el objeto cliente completo
+function ClienteItem({ cliente, onEliminar, onGuardar }) { // Recibimos el objeto cliente completo
   
+    // ⭐️ 1. Nuevo Estado: Controla si el componente está en modo edición
+  const [isEditing, setIsEditing] = useState(false);
+  
+  // ⭐️ 2. Estados para los campos (si estamos editando, se pueden cambiar)
+  const [nombreEditado, setNombreEditado] = useState(cliente.nombre);
+  const [telefonoEditado, setTelefonoEditado] = useState(cliente.telefono);
+  
+  // Función para cambiar al modo edición
+  const handleEditClick = () => {
+    setIsEditing(true);
+  };
+  
+  // Función para manejar el guardado
+  const handleGuardar = (e) => {
+    e.preventDefault();
+    
+    // Creamos el objeto cliente actualizado
+    const clienteActualizado = {
+      ...cliente, // Copiamos el resto de las propiedades (como el ID)
+      nombre: nombreEditado,
+      telefono: telefonoEditado,
+    };
+    
+    // ⭐️ Ejecutamos la función del Padre
+    onGuardar(clienteActualizado); 
+    
+    // Volvemos al modo de visualización
+    setIsEditing(false);
+  };
+    
     const handleEliminarClick = () => {
     // Lógica de confirmación antes de eliminar
     if (window.confirm(`¿Seguro que quieres eliminar a ${cliente.nombre}?`)) {
@@ -13,20 +45,30 @@ function ClienteItem({ cliente, onEliminar }) { // Recibimos el objeto cliente c
   };
   
   return (
-    <li key={cliente.id} className="cliente-item">
-      {/* Usamos los datos pasados por props */}
-      <strong>{cliente.nombre}</strong> - Tel: {cliente.telefono}
-      {/* Botones de acción irán aquí... */}
-      {/* Botón de Eliminar */}
-      <button 
-        className="btn-eliminar" 
-        onClick={handleEliminarClick} // 👈 El evento de clic llama a la función
-      >
-        🗑️ Eliminar
-      </button>
-      
-      {/* Botón de Editar lo haremos a continuación */}
-      <button className="btn-editar">✏️ Editar</button>
+    <li className="cliente-item">
+        {isEditing ? (
+        // ⭐️ Modo EDICIÓN: Un formulario que permite cambiar los valores
+        <form onSubmit={handleGuardar}>
+          <input 
+            value={nombreEditado} 
+            onChange={(e) => setNombreEditado(e.target.value)} 
+          />
+          <input 
+            value={telefonoEditado} 
+            onChange={(e) => setTelefonoEditado(e.target.value)} 
+          />
+          <button type="submit">💾 Guardar</button>
+          <button type="button" onClick={() => setIsEditing(false)}>❌ Cancelar</button>
+        </form>
+      ) : (
+        // ⭐️ Modo VISUALIZACIÓN
+        <div>
+            {/* Usamos los datos pasados por props */}
+            <strong>{cliente.nombre}</strong> - Tel: {cliente.telefono}
+            <button className="btn-eliminar" onClick={handleEliminarClick} >🗑️ Eliminar</button>
+            <button className="btn-editar"onClick={handleEditClick}>✏️ Editar</button>
+        </div>
+      )}
     </li>
   );
 }
