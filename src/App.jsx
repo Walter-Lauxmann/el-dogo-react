@@ -1,12 +1,17 @@
 // src/App.jsx (o VeterinariaApp.jsx)
-
 import React, { useState, useEffect } from 'react'; // ¡Importamos useState!
+// ⭐️ Importamos las herramientas clave del Router
+import { Routes, Route } from 'react-router-dom';
+import Navegacion from './components/Navegacion';
+// ⭐️ Importamos las vistas
+import VistaMascotas from './components/VistaMascotas';
+import VistaConfiguracion from './components/VistaConfiguracion';
 import FormularioCliente from './components/FormularioCliente'; // ¡Lo importamos!
 import ClienteItem from './components/ClienteItem';
 import Login from './components/Login';
 import './App.css'; 
 
-function VeterinariaApp() {
+function VistaClientes() {
   
   // 1. Estado inicial: Intentamos cargar datos desde localStorage
   // Si no hay nada, usamos la lista vacía [] para evitar los datos de ejemplo
@@ -65,20 +70,10 @@ function VeterinariaApp() {
     setClientes(listaActualizada);
   };
 
-  // ⭐️ 1. Nuevo Estado de Seguridad: Por defecto, nadie está logueado (false)
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  
-  // ⭐️ 2. Función Setter que pasaremos al componente Login
-  const handleLogin = (estado) => {
-    setIsLoggedIn(estado); // Cambia el estado a true si el login fue exitoso
-  };
+
 
   return (
     <div className="app-container">
-      <h1>El Dogo - Gestión de Veterinaria 🐾</h1>
-      {/* ⭐️ 3. EL RENDERIZADO CONDICIONAL GLOBAL */}
-      {isLoggedIn ? (
-        // Bloque A: Si el usuario está logueado (TRUE) 
       <section className="dashboard">
         <h2>Gestión de Clientes</h2>
         
@@ -103,6 +98,42 @@ function VeterinariaApp() {
           ))}
         </ul>
       </section>
+    </div>
+  );
+  
+}
+
+function VeterinariaApp() {
+  // ⭐️ 1. Nuevo Estado de Seguridad: Por defecto, nadie está logueado (false)
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  
+  // ⭐️ 2. Función Setter que pasaremos al componente Login
+  const handleLogin = (estado) => {
+    setIsLoggedIn(estado); // Cambia el estado a true si el login fue exitoso
+  };
+
+  return (
+    <div className="app-container">
+      <h1>El Dogo - Gestión de Veterinaria 🐾</h1>
+      {/* ⭐️ 3. EL RENDERIZADO CONDICIONAL GLOBAL */}
+      {isLoggedIn ? (
+        // Bloque A: Si el usuario está logueado (TRUE) 
+      <>
+        {/* ⭐️ La barra de Navegación se mostrará siempre que estemos logueados */}
+        <Navegacion /> 
+        
+        {/* ⭐️ El CORAZÓN DEL ROUTER: Aquí se renderizará el componente que coincida con la URL */}
+        <Routes>
+          {/* Route 1: La ruta por defecto (URL: /) */}
+          <Route path="/" element={<VistaClientes />} /> 
+          {/* Route 2: URL: /mascotas */}
+          <Route path="/mascotas" element={<VistaMascotas />} />
+          {/* Route 3: URL: /config */}
+          <Route path="/config" element={<VistaConfiguracion />} />
+          {/* Opcional: Ruta para cuando no se encuentra nada */}
+          <Route path="*" element={<h2>404 | Página no encontrada</h2>} />
+        </Routes>
+      </>
       ) : (
         // Bloque B: Si el usuario NO está logueado (FALSE)
         // Mostramos el componente Login, pasándole la función handleLogin
@@ -117,7 +148,6 @@ function VeterinariaApp() {
       )}
     </div>
   );
-  
 }
 
 export default VeterinariaApp;
