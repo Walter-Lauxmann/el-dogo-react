@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react'; // ¡Importamos useState!
 import FormularioCliente from './components/FormularioCliente'; // ¡Lo importamos!
+import ClienteItem from './components/ClienteItem';
 import './App.css'; 
 
 function VeterinariaApp() {
@@ -49,12 +50,9 @@ function VeterinariaApp() {
         <ul className="lista-clientes">
           {/* ⭐️ 1. Usamos llaves {} para meter JavaScript (el .map) en el JSX */}
           {clientes.map((cliente) => (
-            // ⭐️ 2. Por cada 'cliente', retornamos un elemento <li>
-            // ⭐️ 3. ¡LA REGLA CLAVE! Debemos asignar la prop 'key'
-            <li key={cliente.id} className="cliente-item">
-              <strong>{cliente.nombre}</strong> - Tel: {cliente.telefono}
-              {/* Aquí luego pondremos botones de Modificar/Eliminar */}
-            </li>
+            // Ahora es más legible, pasamos el objeto completo 'cliente'
+            <ClienteItem key={cliente.id} cliente={cliente} />
+
           ))}
         </ul>
       </section>
