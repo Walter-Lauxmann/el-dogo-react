@@ -28,6 +28,18 @@ function VeterinariaApp() {
     ]);
   };
 
+  // ⭐️ Función para eliminar un cliente
+  const eliminarCliente = (clienteId) => {
+    // 1. Usamos .filter() para crear un NUEVO array
+    // .filter() incluye solo los elementos para los que la condición es TRUE.
+    const listaActualizada = clientes.filter(cliente => 
+      cliente.id !== clienteId // Se queda con todos EXCEPTO el que tiene el ID a eliminar
+    );
+    
+    // 2. Pasamos el NUEVO array inmutable al Setter
+    setClientes(listaActualizada);
+  };
+
   return (
     <div className="app-container">
       <h1>El Dogo - Gestión de Veterinaria 🐾</h1>
@@ -50,8 +62,12 @@ function VeterinariaApp() {
         <ul className="lista-clientes">
           {/* ⭐️ 1. Usamos llaves {} para meter JavaScript (el .map) en el JSX */}
           {clientes.map((cliente) => (
-            // Ahora es más legible, pasamos el objeto completo 'cliente'
-            <ClienteItem key={cliente.id} cliente={cliente} />
+            // ⭐️ Pasar la función como prop al componente hijo
+            <ClienteItem 
+              key={cliente.id} 
+              cliente={cliente} 
+              onEliminar={eliminarCliente}  // 👈 Nueva prop
+            />
 
           ))}
         </ul>
