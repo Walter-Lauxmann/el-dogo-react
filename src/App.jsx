@@ -1,6 +1,6 @@
 // src/App.jsx (o VeterinariaApp.jsx)
 
-import React, { useState } from 'react'; // ¡Importamos useState!
+import React, { useState, useEffect } from 'react'; // ¡Importamos useState!
 import FormularioCliente from './components/FormularioCliente'; // ¡Lo importamos!
 import ClienteItem from './components/ClienteItem';
 import Login from './components/Login';
@@ -8,14 +8,22 @@ import './App.css';
 
 function VeterinariaApp() {
   
-  // 🐶 Nuestro Primer Estado: Lista de Clientes
-  // clientes: la variable que contiene la lista (un array de objetos)
-  // setClientes: la función para cambiar esa lista
-  const [clientes, setClientes] = useState([
-    // Empezamos con un cliente de ejemplo para probar
-    { id: 1, nombre: 'Juan Pérez', telefono: '1123456789' },
-    { id: 2, nombre: 'Ana Gómez', telefono: '1198765432' },
-  ]);
+  // 1. Estado inicial: Intentamos cargar datos desde localStorage
+  // Si no hay nada, usamos la lista vacía [] para evitar los datos de ejemplo
+  const [clientes, setClientes] = useState(() => {
+    const datosGuardados = localStorage.getItem('clientesDogo');
+    // Si hay datos guardados, los parseamos (JSON.parse), si no, devolvemos un array vacío
+    return datosGuardados ? JSON.parse(datosGuardados) : [];
+  }
+  );
+
+  // ⭐️ 2. useEffect para GUARDAR los datos
+  useEffect(() => {
+    // Esta función se dispara CADA VEZ que el array 'clientes' cambia
+    console.log("Detectado cambio en la lista de clientes. ¡Guardando!");
+    // Guardamos la lista en el navegador, convertida a string (JSON.stringify)
+    localStorage.setItem('clientesDogo', JSON.stringify(clientes));
+  }, [clientes]); // 👈 Dependencia: Vigila la variable 'clientes'
 
   // ⭐️ La Función que se ejecutará en el Padre
   const agregarNuevoCliente = (nuevoCliente) => {
