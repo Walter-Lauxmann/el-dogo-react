@@ -1,37 +1,62 @@
-// src/App.jsx o similar
+// src/App.jsx (o VeterinariaApp.jsx)
 
-import './App.css'; // Asume que tienes un archivo CSS para estilos
+import React, { useState } from 'react'; // ¡Importamos useState!
+import FormularioCliente from './components/FormularioCliente'; // ¡Lo importamos!
+import './App.css'; 
 
-// 1. Definimos nuestro componente principal
-// Es una función que, por convención, empieza con Mayúscula.
 function VeterinariaApp() {
   
-  // 2. Aquí dentro va la lógica de JavaScript (aún simple)
-  const nombreApp = "El Dogo - Gestión de Veterinaria";
+  // 🐶 Nuestro Primer Estado: Lista de Clientes
+  // clientes: la variable que contiene la lista (un array de objetos)
+  // setClientes: la función para cambiar esa lista
+  const [clientes, setClientes] = useState([
+    // Empezamos con un cliente de ejemplo para probar
+    { id: 1, nombre: 'Juan Pérez', telefono: '1123456789' },
+    { id: 2, nombre: 'Ana Gómez', telefono: '1198765432' },
+  ]);
 
-  // 3. El componente DEBE devolver el JSX (lo que se va a ver en pantalla)
+  // ⭐️ La Función que se ejecutará en el Padre
+  const agregarNuevoCliente = (nuevoCliente) => {
+    // La función recibe el objeto 'nuevoCliente' como parámetro desde el Hijo.
+    // Usamos el Setter para agregar el nuevo cliente a la lista existente.
+    // IMPORTANTE: Siempre debes crear una *nueva* lista (copia) con el spread operator
+    // {...clientes} y agregar el nuevo elemento, ¡nunca modificar la lista original!
+    setClientes([
+      ...clientes, // Copia todos los clientes existentes
+      nuevoCliente // Agrega el nuevo cliente al final
+    ]);
+  };
+
   return (
     <div className="app-container">
-      {/* Esto es JSX. Parece HTML, ¡pero nos permite meter variables de JS!
-        Para ello, usamos llaves { }
-      */}
-      <h1>{nombreApp}</h1>
-      <p>¡Bienvenido, Ricardo! Aquí gestionarás a tus Clientes y Mascotas.</p>
+      <h1>El Dogo - Gestión de Veterinaria 🐾</h1>
       
-      {/* En la próxima etapa, aquí pondremos otros componentes */}
-      <section className="dashboard">
-        {/* Placeholder para Clientes y Mascotas */}
-        <h2>Gestión de Clientes</h2>
-        <h2>Gestión de Mascotas</h2>
-      </section>
-
-      {/* ¡Ojo! En JSX, la clase de CSS se llama 'className', no 'class',
-        para evitar conflictos con la palabra reservada 'class' de JS.
+      {/* Aquí podemos mostrar cuántos clientes tenemos 
+        ¡El valor 'clientes.length' se actualizará automáticamente 
+        cuando usemos setClientes!
       */}
+      <p>Total de clientes registrados: **{clientes.length}**</p> 
+
+      <section className="dashboard">
+        <h2>Gestión de Clientes</h2>
+        {/* 
+        ¡Lo usamos como una etiqueta HTML! 
+        ⭐️ PASAMOS LA FUNCIÓN COMO UNA PROP al componente hijo
+        */}
+        <FormularioCliente onClienteAgregado={agregarNuevoCliente} />
+        
+        <h2>Clientes Actuales</h2>
+        <ul>
+          {/* En la Etapa 3 veremos cómo recorrer esta lista, 
+             pero por ahora solo mostramos el primer elemento */}
+          <li>
+            **{clientes[0].nombre}** - Tel: {clientes[0].telefono}
+          </li>
+        </ul>
+      </section>
       
     </div>
   );
 }
 
-// 4. Exportamos el componente para poder usarlo en otro lugar (generalmente index.js)
 export default VeterinariaApp;
