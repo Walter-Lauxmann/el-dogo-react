@@ -46,12 +46,16 @@ function VeterinariaApp() {
         <FormularioCliente onClienteAgregado={agregarNuevoCliente} />
         
         <h2>Clientes Actuales</h2>
-        <ul>
-          {/* En la Etapa 3 veremos cómo recorrer esta lista, 
-             pero por ahora solo mostramos el primer elemento */}
-          <li>
-            **{clientes[0].nombre}** - Tel: {clientes[0].telefono}
-          </li>
+        <ul className="lista-clientes">
+          {/* ⭐️ 1. Usamos llaves {} para meter JavaScript (el .map) en el JSX */}
+          {clientes.map((cliente) => (
+            // ⭐️ 2. Por cada 'cliente', retornamos un elemento <li>
+            // ⭐️ 3. ¡LA REGLA CLAVE! Debemos asignar la prop 'key'
+            <li key={cliente.id} className="cliente-item">
+              <strong>{cliente.nombre}</strong> - Tel: {cliente.telefono}
+              {/* Aquí luego pondremos botones de Modificar/Eliminar */}
+            </li>
+          ))}
         </ul>
       </section>
       
