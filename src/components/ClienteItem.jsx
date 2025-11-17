@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 
+// ⭐️ Importamos Link
+import { Link } from 'react-router-dom';
+
 import styles from './ClienteItem.module.css';
 
 // src/components/ClienteItem.jsx (¡Lo crearemos!)
@@ -66,7 +69,14 @@ function ClienteItem({ cliente, onEliminar, onGuardar }) { // Recibimos el objet
         // ⭐️ Modo VISUALIZACIÓN
         <div className={`${styles.itemBase} ${cliente.esVIP ? styles.itemVIP : ''}`}>
             {/* Usamos los datos pasados por props */}
-            <strong>{cliente.nombre}</strong> - Tel: {cliente.telefono}
+            <div className="info-cliente">
+                {/* ⭐️ USAMOS LINK: Esto genera una URL como /cliente/10001 */}
+                <Link to={`/cliente/${cliente.id}`}>
+                    <strong>{cliente.nombre}</strong> 
+                </Link>
+                - Tel: {cliente.telefono}
+            </div>
+
             <button className="btn-editar"onClick={handleEditClick}>✏️ Editar</button>
             <button className="btn-eliminar" onClick={handleEliminarClick} >🗑️ Eliminar</button>
         </div>

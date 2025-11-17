@@ -5,6 +5,7 @@ import { Routes, Route } from 'react-router-dom';
 import Navegacion from './components/Navegacion';
 // ⭐️ Importamos las vistas
 import VistaClientes from './components/VistaClientes';
+import VistaDetalleCliente from './components/VistaDetalleCliente';
 import VistaMascotas from './components/VistaMascotas';
 import VistaConfiguracion from './components/VistaConfiguracion';
 import Login from './components/Login';
@@ -151,6 +152,15 @@ function VeterinariaApp() {
               onEliminarCliente={eliminarCliente}
             />
           } /> 
+
+          {/* ⭐️ RUTA DINÁMICA: /cliente/:id */}
+            <Route path="/cliente/:id" element={
+                <VistaDetalleCliente 
+                    clientes={clientes} // Necesitamos la lista para buscar al dueño
+                    mascotas={mascotas} // Necesitamos las mascotas para filtrar
+                />
+            } />
+
           {/* Route 2: URL: /mascotas */}
           <Route path="/mascotas" element={
             <VistaMascotas
