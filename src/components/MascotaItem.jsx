@@ -1,5 +1,7 @@
 // src/components/MascotaItem.jsx
 import React, { useState } from 'react';
+// ⭐️ 1. IMPORTAMOS EL MÓDULO DE ESTILOS
+import styles from './MascotaItem.module.css';
 
 function MascotaItem({ clientes, mascota, onEliminar, onGuardar }) { // Recibimos el objeto mascota completo
   
@@ -51,10 +53,10 @@ function MascotaItem({ clientes, mascota, onEliminar, onGuardar }) { // Recibimo
   };
   
   return (
-    <li className="mascota-item">
+    <li className={styles.tarjetaMascota}>
         {isEditing ? (
         // ⭐️ Modo EDICIÓN: Un formulario que permite cambiar los valores
-        <form onSubmit={handleGuardar}>
+        <form onSubmit={handleGuardar} className={styles.modoEdicion}>
           <input 
             value={nombreEditado} 
             onChange={(e) => setNombreEditado(e.target.value)} 
@@ -77,11 +79,17 @@ function MascotaItem({ clientes, mascota, onEliminar, onGuardar }) { // Recibimo
         </form>
       ) : (
         // ⭐️ Modo VISUALIZACIÓN
-        <div>
+        <div className={styles.infoMascota}>
             {/* Usamos los datos pasados por props */}
-            <strong>{mascota.nombre}</strong> - Especie: {mascota.especie} - Dueño: {getNombreDuenio(mascota.clienteId)}
-            <button className="btn-editar"onClick={handleEditClick}>✏️ Editar</button>
-            <button className="btn-eliminar" onClick={handleEliminarClick} >🗑️ Eliminar</button>
+            <strong className={styles.nombreMascota}>{mascota.nombre}</strong> 
+            - Especie: {mascota.especie} 
+            <span className={styles.dueño}>
+            - Dueño: {getNombreDuenio(mascota.clienteId)}
+            </span>
+            <div className={styles.acciones}>
+              <button className="btn-editar"onClick={handleEditClick}>✏️ Editar</button>
+              <button className="btn-eliminar" onClick={handleEliminarClick} >🗑️ Eliminar</button>
+            </div>
         </div>
       )}
     </li>

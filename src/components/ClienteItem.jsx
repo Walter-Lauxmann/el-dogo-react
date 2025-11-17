@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 
+import styles from './ClienteItem.module.css';
+
 // src/components/ClienteItem.jsx (¡Lo crearemos!)
 // Este componente recibirá { cliente } como una prop.
 // ⭐️ Recibimos la función onEliminar como una prop
@@ -62,7 +64,7 @@ function ClienteItem({ cliente, onEliminar, onGuardar }) { // Recibimos el objet
         </form>
       ) : (
         // ⭐️ Modo VISUALIZACIÓN
-        <div>
+        <div className={`${styles.itemBase} ${cliente.esVIP ? styles.itemVIP : ''}`}>
             {/* Usamos los datos pasados por props */}
             <strong>{cliente.nombre}</strong> - Tel: {cliente.telefono}
             <button className="btn-editar"onClick={handleEditClick}>✏️ Editar</button>

@@ -3,14 +3,18 @@ import React from 'react';
 import FormularioCliente from './FormularioCliente'; // ¡Lo importamos!
 import ClienteItem from './ClienteItem';
 
+// ⭐️ Importamos el objeto 'styles'
+import styles from './VistaClientes.module.css';
+
 function VistaClientes({ clientes, onClienteAgregado, onActualizarCliente, onEliminarCliente }) {
   
   return (
-    <div className="app-container">
+    
+    <div className={styles.contenedorPrincipal}>
       <section className="dashboard">
-        <h2>Gestión de Clientes</h2>
+        <h2 className={styles.titulo}>Gestión de Clientes</h2>
         
-        <p>Total de clientes registrados: **{clientes.length}**</p> 
+        <p className={styles.contador}>Total de clientes registrados: **{clientes.length}**</p> 
         {/* 
         ¡Lo usamos como una etiqueta HTML! 
         ⭐️ PASAMOS LA FUNCIÓN COMO UNA PROP al componente hijo
