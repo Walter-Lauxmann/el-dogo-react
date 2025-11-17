@@ -1,11 +1,19 @@
 // src/components/VistaMascotas.jsx
-import React from 'react';
+import React, {useContext} from 'react';
+import { VeterinariaContext } from '../context/VeterinariaContext';
 import FormularioMascota from './FormularioMascota';
 import MascotaItem from './MascotaItem';
 
 // ⭐️ Recibimos props de clientes, mascotas y la función para agregar
-function VistaMascotas({ clientes, mascotas, onMascotaAgregada, onActualizarMascota, onEliminarMascota }) {
-    
+function VistaMascotas() {
+    // ⭐️ Consumir la data: Accedemos directamente a lo que necesitamos del contexto
+        const { 
+            clientes, 
+            mascotas,
+            agregarMascota,
+            actualizarMascota,
+            eliminarMascota 
+        } = useContext(VeterinariaContext);
     return (
         <div>
             <h2>🐾 Gestión de Mascotas</h2>
@@ -13,7 +21,7 @@ function VistaMascotas({ clientes, mascotas, onMascotaAgregada, onActualizarMasc
             {/* 1. Usamos el formulario, pasándole las props necesarias */}
             <FormularioMascota 
                 clientes={clientes} 
-                onMascotaAgregada={onMascotaAgregada} 
+                onMascotaAgregada={agregarMascota} 
             />
             
             {/* 2. Lista de Mascotas */}
@@ -25,8 +33,8 @@ function VistaMascotas({ clientes, mascotas, onMascotaAgregada, onActualizarMasc
                         key={mascota.id} 
                         clientes={clientes}
                         mascota={mascota} 
-                        onEliminar={onEliminarMascota}  
-                        onGuardar={onActualizarMascota} // 👈 Nueva prop para la modificación
+                        onEliminar={eliminarMascota}  
+                        onGuardar={actualizarMascota} // 👈 Nueva prop para la modificación
                     />
                 ))}
             </ul>

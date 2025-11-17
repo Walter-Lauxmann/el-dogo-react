@@ -1,13 +1,22 @@
 // src/components/VistaClientes.jsx
-import React from 'react';
+import React, {useContext} from 'react';
+import { VeterinariaContext } from '../context/VeterinariaContext';
 import FormularioCliente from './FormularioCliente'; // ¡Lo importamos!
 import ClienteItem from './ClienteItem';
 
 // ⭐️ Importamos el objeto 'styles'
 import styles from './VistaClientes.module.css';
 
-function VistaClientes({ clientes, onClienteAgregado, onActualizarCliente, onEliminarCliente }) {
+function VistaClientes() {
+  // ⭐️ Consumir la data: Accedemos directamente a lo que necesitamos del contexto
+    const { 
+        clientes, 
+        agregarCliente, 
+        actualizarCliente, 
+        eliminarCliente 
+    } = useContext(VeterinariaContext);
   
+
   return (
     
     <div className={styles.contenedorPrincipal}>
@@ -19,7 +28,7 @@ function VistaClientes({ clientes, onClienteAgregado, onActualizarCliente, onEli
         ¡Lo usamos como una etiqueta HTML! 
         ⭐️ PASAMOS LA FUNCIÓN COMO UNA PROP al componente hijo
         */}
-        <FormularioCliente onClienteAgregado={onClienteAgregado} />
+        <FormularioCliente onClienteAgregado={agregarCliente} />
         
         <h2>Clientes Actuales</h2>
         <ul className="lista-clientes">
@@ -29,8 +38,8 @@ function VistaClientes({ clientes, onClienteAgregado, onActualizarCliente, onEli
             <ClienteItem 
               key={cliente.id} 
               cliente={cliente} 
-              onEliminar={onEliminarCliente}  
-              onGuardar={onActualizarCliente} // 👈 Nueva prop para la modificación
+              onEliminar={eliminarCliente}  
+              onGuardar={actualizarCliente} // 👈 Nueva prop para la modificación
             />
           ))}
         </ul>
