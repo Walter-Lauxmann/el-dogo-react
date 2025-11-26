@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 // ⭐️ Importamos Link
 import { Link } from 'react-router-dom';
 
-import styles from './ClienteItem.module.css';
+//import styles from './ClienteItem.module.css';
 
 // src/components/ClienteItem.jsx (¡Lo crearemos!)
 // Este componente recibirá { cliente } como una prop.
@@ -67,18 +67,18 @@ function ClienteItem({ cliente, onEliminar, onGuardar }) { // Recibimos el objet
         </form>
       ) : (
         // ⭐️ Modo VISUALIZACIÓN
-        <div className={`${styles.itemBase} ${cliente.esVIP ? styles.itemVIP : ''}`}>
+        <div className='flex items-center gap-x-6'>
             {/* Usamos los datos pasados por props */}
-            <div className="info-cliente">
+            <div className="text-base/7 font-semibold tracking-tight text-white">
                 {/* ⭐️ USAMOS LINK: Esto genera una URL como /cliente/10001 */}
                 <Link to={`/cliente/${cliente.id}`}>
                     <strong>{cliente.nombre}</strong> 
                 </Link>
-                - Tel: {cliente.telefono}
+                <br /> Tel: {cliente.telefono}
             </div>
 
-            <button className="btn-editar"onClick={handleEditClick}>✏️ Editar</button>
-            <button className="btn-eliminar" onClick={handleEliminarClick} >🗑️ Eliminar</button>
+            <button className="text-sm/6 font-semibold text-indigo-400"onClick={handleEditClick}>✏️ Editar</button>
+            <button className="text-sm/6 font-semibold text-indigo-400" onClick={handleEliminarClick} >🗑️ Eliminar</button>
         </div>
       )}
     </li>

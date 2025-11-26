@@ -1,0 +1,12 @@
+/* src/index.css */
+@import "tailwindcss";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Estilos de la aplicación, si los necesitas */
+body {
+    background-color: #f7f9fa;
+    font-family: Arial, sans-serif;
+}
