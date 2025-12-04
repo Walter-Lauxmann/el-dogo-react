@@ -2,17 +2,19 @@
 
 import React, { useState, useEffect } from 'react';
 import { VeterinariaContext } from './VeterinariaContext'; // ⭐️ 1. Importamos el contexto desde el archivo separado
-import api from '../api/axios'; // ⭐️ Importamos la instancia de Axios
+import { useApi } from '../hooks/useApi'; // ⭐️ Importamos el nuevo hook
 
 // ⭐️ CREAR EL PROVEEDOR (El componente que envuelve la app y gestiona el estado)
-export const VeterinariaProvider = ({ children }) => {
-    
-    // Mover toda la lógica de estado de Clientes y Mascotas aquí:
-    
+export const VeterinariaProvider = ({ children }) => {   
+   
     // El estado inicial es un array vacío, ya que los datos vienen de la API.
     const [clientes, setClientes] = useState([]);
     const [mascotas, setMascotas] = useState([]);
     const [isLoading, setIsLoading] = useState(true); // Nuevo estado para manejo de carga
+
+    // ⭐️ Instanciamos los hooks de API para cada endpoint
+    const clientesApi = useApi('/clientes');
+    const mascotasApi = useApi('/mascotas');
     
     // ----------------------------------------------------
     // ⭐️ 1. LÓGICA DE CARGA INICIAL (GET - READ)
@@ -20,103 +22,81 @@ export const VeterinariaProvider = ({ children }) => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                // Peticiones simultáneas: Clientes y Mascotas
-                const [clientesRes, mascotasRes] = await Promise.all([
-                    api.get('/clientes'),
-                    api.get('/mascotas')
+                // ⭐️ Usamos el método get del hook para cargar datos
+                const [clientesData, mascotasData] = await Promise.all([
+                    clientesApi.get(),
+                    mascotasApi.get()
                 ]);
 
-                setClientes(clientesRes.data);
-                setMascotas(mascotasRes.data);
-                
+                setClientes(clientesData);
+                setMascotas(mascotasData);
             } catch (error) {
-                console.error("Error al cargar datos de la API:", error);
-                // Aquí podrías mostrar un error al usuario
+                // El error ya fue logueado en useApi
             } finally {
                 setIsLoading(false);
             }
         };
-
         fetchData();
-    }, []); // El array vacío asegura que se ejecute solo al montar el componente
+    }, []);
 
     // ----------------------------------------------------
     // ⭐️ 2. FUNCIONES DE CLIENTES (CREATE, UPDATE, DELETE)
     // ----------------------------------------------------
     
-    const agregarCliente = async (nuevoCliente) => {
+   const agregarCliente = async (nuevoCliente) => {
         try {
-            // POST: envía el nuevo cliente al backend
-            const response = await api.post('/clientes', nuevoCliente);
-            // El backend devuelve el objeto creado con el ID
-            setClientes([...clientes, response.data]); 
-        } catch (error) {
-            console.error("Error al agregar cliente:", error);
-        }
+            // ⭐️ Usamos el método create del hook
+            const data = await clientesApi.create(nuevoCliente); 
+            setClientes([...clientes, data]); 
+        } catch (error) { /* Manejo de UI error */ }
     };
     
     const actualizarCliente = async (clienteActualizado) => {
         try {
-            // PUT: envía los datos para actualizar
-            await api.put(`/clientes/${clienteActualizado.id}`, clienteActualizado);
-            // Actualiza el estado local de React
+            // ⭐️ Usamos el método update
+            await clientesApi.update(clienteActualizado.id, clienteActualizado);
             setClientes(clientes.map(cl => 
                 cl.id === clienteActualizado.id ? clienteActualizado : cl
             ));
-        } catch (error) {
-            console.error("Error al actualizar cliente:", error);
-        }
+        } catch (error) { /* Manejo de UI error */ }
     };
     
     const eliminarCliente = async (id) => {
         try {
-            // DELETE: notifica al backend para eliminar
-            await api.delete(`/clientes/${id}`);
-            // Actualiza el estado local de React
+            // ⭐️ Usamos el método remove
+            await clientesApi.remove(id);
             setClientes(clientes.filter(cl => cl.id !== id));
-        } catch (error) {
-            console.error("Error al eliminar cliente:", error);
-        }
+        } catch (error) { /* Manejo de UI error */ }
     };
     
 
     // ----------------------------------------------------
     // ⭐️ 2. FUNCIONES DE MASCOTAS (CREATE, UPDATE, DELETE)
-    // ----------------------------------------------------
-    
+    // ----------------------------------------------------    
     const agregarMascota = async (nuevoMascota) => {
         try {
-            // POST: envía el nuevo Mascota al backend
-            const response = await api.post('/Mascotas', nuevoMascota);
-            // El backend devuelve el objeto creado con el ID
-            setMascotas([...mascotas, response.data]); 
-        } catch (error) {
-            console.error("Error al agregar Mascota:", error);
-        }
+            // ⭐️ Usamos el método create del hook
+            const data = await mascotasApi.create(nuevoMascota); 
+            setMascotas([...mascotas, data]); 
+        } catch (error) { /* Manejo de UI error */ }
     };
     
     const actualizarMascota = async (mascotaActualizado) => {
         try {
-            // PUT: envía los datos para actualizar
-            await api.put(`/Mascotas/${mascotaActualizado.id}`, mascotaActualizado);
-            // Actualiza el estado local de React
-            setMascotas(mascotas.map(ma => 
-                ma.id === mascotaActualizado.id ? mascotaActualizado : ma
+            // ⭐️ Usamos el método update
+            await mascotasApi.update(mascotaActualizado.id, mascotaActualizado);
+            setMascotas(mascotas.map(cl => 
+                cl.id === mascotaActualizado.id ? mascotaActualizado : cl
             ));
-        } catch (error) {
-            console.error("Error al actualizar Mascota:", error);
-        }
+        } catch (error) { /* Manejo de UI error */ }
     };
     
     const eliminarMascota = async (id) => {
         try {
-            // DELETE: notifica al backend para eliminar
-            await api.delete(`/Mascotas/${id}`);
-            // Actualiza el estado local de React
-            setMascotas(mascotas.filter(ma => ma.id !== id));
-        } catch (error) {
-            console.error("Error al eliminar Mascota:", error);
-        }
+            // ⭐️ Usamos el método remove
+            await mascotasApi.remove(id);
+            setMascotas(mascotas.filter(cl => cl.id !== id));
+        } catch (error) { /* Manejo de UI error */ }
     };
 
     // 3. ⭐️ DEFINIR EL OBJETO DE VALOR (Lo que estará disponible para los consumidores)
