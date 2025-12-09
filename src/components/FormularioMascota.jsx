@@ -2,28 +2,15 @@
 
 import React, { useState } from 'react';
 
-// ⭐️ Recibimos la lista de clientes para la selección del dueño
 function FormularioMascota({ clientes, onMascotaAgregada }) {
   const [nombre, setNombre] = useState('');
   const [especie, setEspecie] = useState('');
   const [raza, setRaza] = useState('');
-  // El clienteId es el ID del dueño seleccionado, lo inicializamos como string vacío
-  const [clienteId, setClienteId] = useState(''); 
+  const [clienteId, setClienteId] = useState('');
 
-  const handleNombreChange = (e) => {
-    // Usamos el Setter para actualizar el estado del nombre en tiempo real
-    setNombre(e.target.value); 
-  };
-
-  const handleEspecieChange = (e) => {
-    // Usamos el Setter para actualizar el estado del Especie en tiempo real
-    setEspecie(e.target.value); 
-  };
-
-  const handleRazaChange = (e) => {
-    // Usamos el Setter para actualizar el estado del Raza en tiempo real
-    setRaza(e.target.value); 
-  };
+  const handleNombreChange = (e) => setNombre(e.target.value);
+  const handleEspecieChange = (e) => setEspecie(e.target.value);
+  const handleRazaChange = (e) => setRaza(e.target.value);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -38,12 +25,10 @@ function FormularioMascota({ clientes, onMascotaAgregada }) {
       nombre,
       especie,
       raza,
-      // ⭐️ Clave: Guardamos el ID del dueño como número
-      clienteId: Number(clienteId), 
+      clienteId: Number(clienteId),
     };
 
     onMascotaAgregada(nuevaMascota);
-    // Limpiamos los campos
     setNombre('');
     setEspecie('');
     setRaza('');
@@ -51,54 +36,84 @@ function FormularioMascota({ clientes, onMascotaAgregada }) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="formulario-mascota">
-      <h3>Nueva Mascota</h3>
-      
-      {/* ⭐️ Campo Dueño: Usamos el .map para llenar el <select> */}
-      <label>
-        Dueño (Cliente):
-        <select value={clienteId} onChange={(e) => setClienteId(e.target.value)} required>
-          <option value="">-- Selecciona un dueño --</option>
-          {clientes.map(cliente => (
-            // ⭐️ El 'value' debe ser el ID del cliente
-            <option key={cliente.id} value={cliente.id}>
-              {cliente.nombre}
-            </option>
-          ))}
-        </select>
-      </label>
+    <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-slate-100 dark:border-slate-700 p-6">
+      <div className="flex items-center gap-3 mb-6">
+        <div className="bg-emerald-100 dark:bg-emerald-900/30 p-2 rounded-lg text-2xl">
+          🐾
+        </div>
+        <h3 className="text-xl font-bold text-slate-800 dark:text-white">Nueva Mascota</h3>
+      </div>
 
-      {/* ... (Otros campos de nombre, especie, raza) ... */}
-      <label>
-        Nombre Completo:
-        <input 
-          type="text" 
-          value={nombre} // 👈 El valor del input está controlado por el Estado
-          onChange={handleNombreChange} // 👈 Se actualiza con cada tecla
-          required 
-        />
-      </label>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+            Dueño (Cliente)
+          </label>
+          <select
+            value={clienteId}
+            onChange={(e) => setClienteId(e.target.value)}
+            required
+            className="w-full px-4 py-2 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all dark:text-white"
+          >
+            <option value="">-- Selecciona un dueño --</option>
+            {clientes.map(cliente => (
+              <option key={cliente.id} value={cliente.id}>
+                {cliente.nombre}
+              </option>
+            ))}
+          </select>
+        </div>
 
-      <label>
-        Especie:
-        <input 
-          type="text" 
-          value={especie} // 👈 El valor del input está controlado por el Estado
-          onChange={handleEspecieChange} // 👈 Se actualiza con cada tecla
-          required 
-        />
-      </label>
-      
-      <label>
-        Raza:
-        <input 
-          type="text" 
-          value={raza} 
-          onChange={handleRazaChange} 
-        />
-      </label>
-      <button type="submit">Registrar Mascota</button>
-    </form>
+        <div>
+          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+            Nombre Mascota
+          </label>
+          <input
+            type="text"
+            value={nombre}
+            onChange={handleNombreChange}
+            className="w-full px-4 py-2 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all dark:text-white"
+            placeholder="Ej. Firulais"
+            required
+          />
+        </div>
+
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+              Especie
+            </label>
+            <input
+              type="text"
+              value={especie}
+              onChange={handleEspecieChange}
+              className="w-full px-4 py-2 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all dark:text-white"
+              placeholder="Perro, Gato..."
+              required
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+              Raza (Opcional)
+            </label>
+            <input
+              type="text"
+              value={raza}
+              onChange={handleRazaChange}
+              className="w-full px-4 py-2 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all dark:text-white"
+              placeholder="Golden Retriever"
+            />
+          </div>
+        </div>
+
+        <button
+          type="submit"
+          className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 px-4 rounded-lg shadow-md hover:shadow-lg transition-all transform hover:-translate-y-0.5 active:scale-95 flex justify-center items-center gap-2"
+        >
+          <span>🏥</span> Registrar Paciente
+        </button>
+      </form>
+    </div>
   );
 }
 

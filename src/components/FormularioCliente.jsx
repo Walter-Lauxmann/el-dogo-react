@@ -2,79 +2,80 @@
 
 import React, { useState } from 'react';
 
-// Este es nuestro componente hijo
 function FormularioCliente({ onClienteAgregado }) {
-  
-  // 1. Estados para capturar los datos del formulario (la 'memoria' de lo que se escribe)
+
   const [nombre, setNombre] = useState('');
   const [telefono, setTelefono] = useState('');
-  
-  // 2. Función para manejar los cambios en los campos de texto
-  // El 'e' es el objeto Evento que nos da el navegador.
-  const handleNombreChange = (e) => {
-    // Usamos el Setter para actualizar el estado del nombre en tiempo real
-    setNombre(e.target.value); 
-  };
 
-  const handleTelefonoChange = (e) => {
-    setTelefono(e.target.value);
-  };
-  
-  // 3. Función que se dispara cuando Ricardo pulsa el botón "Registrar"
+  const handleNombreChange = (e) => setNombre(e.target.value);
+  const handleTelefonoChange = (e) => setTelefono(e.target.value);
+
   const handleSubmit = (e) => {
-    // Evitamos que la página se recargue (comportamiento por defecto del formulario HTML)
-    e.preventDefault(); 
-    
+    e.preventDefault();
+
     if (nombre.trim() === '' || telefono.trim() === '') {
       alert('Por favor, completa ambos campos.');
       return;
     }
 
-    // Aquí iría la lógica para registrar al cliente (lo haremos en el siguiente paso)
     const nuevoCliente = {
-      id: Date.now(), // Generamos un ID simple con la hora actual
+      id: Date.now(),
       nombre: nombre,
       telefono: telefono,
     };
-    
-    console.log('¡Cliente listo para registrar!', nuevoCliente);
 
-    // ⭐️ EJECUTAMOS la función que nos pasó el Padre, enviándole los datos.
-    // ¡Esto dispara la actualización del Estado en el componente VeterinariaApp!
     onClienteAgregado(nuevoCliente);
-    
-    // Limpiamos el formulario después de "enviar"
+
     setNombre('');
     setTelefono('');
   };
 
-  // 4. Devolvemos el JSX del formulario
   return (
-    <form onSubmit={handleSubmit} className="formulario-cliente">
-      <h3>Nuevo Cliente</h3>
-      
-      <label>
-        Nombre Completo:
-        <input 
-          type="text" 
-          value={nombre} // 👈 El valor del input está controlado por el Estado
-          onChange={handleNombreChange} // 👈 Se actualiza con cada tecla
-          required 
-        />
-      </label>
-      
-      <label>
-        Teléfono:
-        <input 
-          type="tel" 
-          value={telefono} 
-          onChange={handleTelefonoChange}
-          required 
-        />
-      </label>
-      
-      <button type="submit">Registrar Cliente</button>
-    </form>
+    <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-slate-100 dark:border-slate-700 p-6">
+      <div className="flex items-center gap-3 mb-6">
+        <div className="bg-indigo-100 dark:bg-indigo-900/30 p-2 rounded-lg text-2xl">
+          👤
+        </div>
+        <h3 className="text-xl font-bold text-slate-800 dark:text-white">Nuevo Cliente</h3>
+      </div>
+
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+            Nombre Completo
+          </label>
+          <input
+            type="text"
+            value={nombre}
+            onChange={handleNombreChange}
+            placeholder="Ej. Juan Pérez"
+            className="w-full px-4 py-2 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all dark:text-white"
+            required
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+            Teléfono
+          </label>
+          <input
+            type="tel"
+            value={telefono}
+            onChange={handleTelefonoChange}
+            placeholder="+56 9 1234 5678"
+            className="w-full px-4 py-2 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all dark:text-white"
+            required
+          />
+        </div>
+
+        <button
+          type="submit"
+          className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-4 rounded-lg shadow-md hover:shadow-lg transition-all transform hover:-translate-y-0.5 active:scale-95 flex justify-center items-center gap-2"
+        >
+          <span>✨</span> Registrar Cliente
+        </button>
+      </form>
+    </div>
   );
 }
 
