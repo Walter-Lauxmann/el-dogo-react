@@ -2,10 +2,18 @@
 
 import api from '../api/axios';
 
-// Hook personalizado para envolver las llamadas a la API
+/**
+ * Hook personalizado para envolver las llamadas a la API
+ * @param {*} endpoint 
+ * @returns 
+ */
 export const useApi = (endpoint) => {
     
-    // Función genérica GET
+    /**
+     * Función genérica GET
+     * @param {*} id 
+     * @returns 
+     */
     const get = async (id = '') => {
         try {
             const url = id ? `${endpoint}/${id}` : endpoint;
@@ -17,7 +25,11 @@ export const useApi = (endpoint) => {
         }
     };
 
-    // Función genérica POST
+    /**
+     * Función genérica POST
+     * @param {*} data 
+     * @returns 
+     */
     const create = async (data) => {
         try {
             const response = await api.post(endpoint, data);
@@ -28,7 +40,12 @@ export const useApi = (endpoint) => {
         }
     };
     
-    // Función genérica PUT
+    /**
+     * Función genérica PUT
+     * @param {*} id 
+     * @param {*} data 
+     * @returns 
+     */
     const update = async (id, data) => {
         try {
             const response = await api.put(`${endpoint}/${id}`, data);
@@ -39,7 +56,10 @@ export const useApi = (endpoint) => {
         }
     };
     
-    // Función genérica DELETE
+    /**
+     * Función genérica DELETE
+     * @param {*} id 
+     */
     const remove = async (id) => {
         try {
             await api.delete(`${endpoint}/${id}`);

@@ -3,4 +3,4 @@
 import React, { createContext } from 'react';
 
 // ⭐️ CREAR EL CONTEXTO
-export const VeterinariaContext = createContext();
+export const VeterinariaContext = createContext({});
